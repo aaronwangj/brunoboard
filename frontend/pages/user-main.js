@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Landing from '../components/landing'
 import MakePost from '../components/makepost'
 import firebase from '../firebase/firebase-config'
+import Postfeed from '../components/postfeed'
 
 export default function usermain() {
     // react hook to keep track of login status of user
@@ -19,16 +20,26 @@ export default function usermain() {
     // react hook to keep track of posts
     const [posts, setPosts] = useState([])
 
-    function renderPosts() {
-        let contents = []
-        firebase.firestore().collection("posts").get()
-            .then((querySnapShot) => querySnapShot.docs.map(doc => posts.push(doc.data()["content"])))
-        return contents
+    // react hook to handle updates of the data/rendering
+    const [requestCount, setRequestCount] = useState(0)
+
+    function updatePosts() {
+        if (user && isSignedIn) {
+            // TODO: Add in a loading screen
+            // request posts from firebase and update the <posts> hook
+            firebase.firestore().collection("posts").get()
+                .then((querySnapShot) => {
+                    setPosts(querySnapShot.docs.map(doc => doc.data()))
+                })
+        }
     }
 
-    useEffect(() => renderPosts(), [])
+    // initialize post feed on sign-in
+    // whenever requestCount is changed, the posts are updated
+    useEffect(() => updatePosts(), [requestCount])
+    const update = () => setRequestCount(requestCount + 1)
 
-    const containerStyleString = "h-screen w-screen" + (isSignedIn ? " grid grid-rows-5" : "");
+    const containerStyleString = "h-screen w-screen"
     return <div className={containerStyleString}>
         <Navbar isLanding={false} isSignedIn={isSignedIn} setSignedIn={setIsSignedIn}/>
         {!isSignedIn ?
@@ -41,11 +52,7 @@ export default function usermain() {
                 setGoogleId={setGoogleId}
                 setUser={setUser} />
             :
-            <div className='row-start-2 m-auto font-extrabold text-4xl'> 
-                Google Login Successful: User Main Page To Do 
-                <div>{posts.map(s => <p>{s}</p>)}</div>
-                <MakePost />
-            </div>
+            <Postfeed posts={posts} update={update} />
         }
     </div>
 }
