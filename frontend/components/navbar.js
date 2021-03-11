@@ -1,5 +1,6 @@
 import { GoogleLogout } from 'react-google-login'; 
 import Link from "next/link";
+import firebase from '../firebase/firebase-config'
 
 export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
     // The className string used to style links in the Navbar
@@ -9,10 +10,14 @@ export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
      * Handler for logout functionality.
      * @param {json} response The response returned by Google upon logout request.
      */
-    const logoutGoogle = (response) => {
-        console.log("Successfully logged out via Google")
-        setSignedIn(false)
-        console.log(response)
+    const logoutGoogle = () => {
+        firebase.auth().signOut().then(function() {
+            console.log("Sign-out successful.")
+            setSignedIn(false)
+            // TODO: Figure out how to overwrite auth persistence
+            }, function(error) {
+            console.log(error)
+        })
     }
 
     return <div className="absolute top-0 right-0 p-4 w-full flex justify-between 
@@ -28,14 +33,7 @@ export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
             </Link>
             {/* render the logout button if user is signedin */}
             {isSignedIn ? <div className={'inline font-bold ' + linkStyling}>
-                <GoogleLogout
-                    clientId="633400520905-dacd7n1cv19v8e542s9oi57mm17mu033"
-                    render={renderProps => 
-                        (<div className='inline cursor-pointer' onClick={renderProps.onClick}>Logout</div>)}
-                    buttonText="Logout"
-                    onLogoutSuccess={logoutGoogle}
-                    >
-                </GoogleLogout>
+                <button onClick={() => logoutGoogle()}> Logout </button>
             </div> : <div/>}
         </div>
 

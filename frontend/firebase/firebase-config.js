@@ -16,8 +16,8 @@ var firebaseConfig = {
     measurementId: "G-8FJYBWXE53"
   };
 
-  // initialize firebase project
-  try {
+// initialize firebase project
+try {
     if (typeof window !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
         firebase.analytics()
