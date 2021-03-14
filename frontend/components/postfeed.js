@@ -1,20 +1,18 @@
 import MakePost from './makepost'
 import { useEffect } from 'react'
+import Post from './post'
 
 export default function Postfeed(props) {
+    // initialize posts on sign in
     useEffect(() => props.update(), [])
 
-    return <div className="h-screen w-screen grid grid-rows-5">
-                <div className="row-start-1"> 
+    return <div className="flex justify-center">
+                <div className="mt-20 m-auto">
+                    <ul>
+                        {props.posts.map(docData => <Post docData={docData}/>)}
+                    </ul>
+                    <button id="update-user-main" onClick={() => props.update()}>Refresh</button>
                 </div>
-                <div className='row-start-2 m-auto font-extrabold text-4xl'> 
-                    Google Login Successful: User Main Page To Do 
-                    <MakePost />
-                </div>
-                <div>
-                    {props.posts.map(docData => <p key={docData["id"]}>{docData["content"]}</p>)}
-                </div>
-                <button id="update-user-main" onClick={() => props.update()}>Refresh</button>
             </div>
 
 }

@@ -34,7 +34,6 @@ export default function usermain() {
         }
     }
 
-    // initialize post feed on sign-in
     // whenever requestCount is changed, the posts are updated
     useEffect(() => updatePosts(), [requestCount])
     const update = () => setRequestCount(requestCount + 1)
