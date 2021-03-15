@@ -20,7 +20,7 @@ export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
         })
     }
 
-    return <div className="absolute top-0 right-0 p-4 w-full flex justify-between 
+    return <div id="navbar" className="absolute top-0 right-0 p-4 w-full flex justify-between 
                             items-center font-display bg-white z-50">
         <Link href="/">
             <a className="font-semibold text-gray-700 text-xl">

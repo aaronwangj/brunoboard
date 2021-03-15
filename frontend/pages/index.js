@@ -5,7 +5,7 @@ import Usermain from './user-main'
 
 export default function Home() {
   return (
-    <div className='h-screen flex justify-center px-4 items-center'>
+    <div className='h-screen font-display flex justify-center px-4 items-center'>
       <Usermain />
     </div>
   )

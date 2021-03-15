@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-        display: ['sofia-pro', ...defaultTheme.fontFamily.sans],
+        display: ['roboto', 'sans-serif', ...defaultTheme.fontFamily.sans],
       }
     },
   },

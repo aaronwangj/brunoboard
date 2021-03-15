@@ -17,28 +17,30 @@ export default function usermain() {
     //react hook to track firebase authentication
     const [user, setUser] = useState(null)
 
+    // react hook to handle updates of the data/rendering
+    const [requestCount, setRequestCount] = useState(0)
+        
     // react hook to keep track of posts
     const [posts, setPosts] = useState([])
 
-    // react hook to handle updates of the data/rendering
-    const [requestCount, setRequestCount] = useState(0)
+    
 
-    function updatePosts() {
-        if (user && isSignedIn) {
-            // TODO: Add in a loading screen
-            // request posts from firebase and update the <posts> hook
-            firebase.firestore().collection("posts").get()
-                .then((querySnapShot) => {
-                    setPosts(querySnapShot.docs.map(doc => doc.data()))
-                })
-        }
-    }
+    // function updatePosts() {
+    //     if (user && isSignedIn) {
+    //         // TODO: Add in a loading screen
+    //         // request posts from firebase and update the <posts> hook
+    //         firebase.firestore().collection("posts").orderBy("createdAt", "desc").get()
+    //             .then((querySnapShot) => {
+    //                 setPosts(querySnapShot.docs.map(doc => doc.data()))
+    //             })
+    //     }
+    // }
 
     // whenever requestCount is changed, the posts are updated
-    useEffect(() => updatePosts(), [requestCount])
+    // useEffect(() => updatePosts(), [requestCount])
     const update = () => setRequestCount(requestCount + 1)
 
-    const containerStyleString = "h-screen w-screen"
+    const containerStyleString = "h-screen w-screen flex justify-center"
     return <div className={containerStyleString}>
         <Navbar isLanding={false} isSignedIn={isSignedIn} setSignedIn={setIsSignedIn}/>
         {!isSignedIn ?
@@ -51,7 +53,10 @@ export default function usermain() {
                 setGoogleId={setGoogleId}
                 setUser={setUser} />
             :
-            <Postfeed posts={posts} update={update} />
+            <div id="user-main-share-feed" className="mt-5 w-full sm:w-1/3">
+                <MakePost update={update} user={user} posts={posts} setPosts={setPosts} />
+                <Postfeed setPosts={setPosts} posts={posts} />
+            </div>
         }
     </div>
 }
