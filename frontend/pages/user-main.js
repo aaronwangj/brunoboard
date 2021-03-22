@@ -40,6 +40,12 @@ export default function usermain() {
     // useEffect(() => updatePosts(), [requestCount])
     const update = () => setRequestCount(requestCount + 1)
 
+    /*
+        TODO: IMPLEMENT SORTING FEATURE BY DATE AS WELL AS AMOUNT OF UPVOTES
+        TODO: IMPLEMENT FILTERING FEATURE BY NAME (AND TAG MAYBE)
+        TODO: IMPLEMENT HOVERING NAMES DISPLAYING EMAIL
+        TODO: IMPLEMENT REQUEST CONTACT INFORMATION FOR ANONYMOUS USERS
+    */
     const containerStyleString = "h-screen w-screen flex justify-center"
     return <div className={containerStyleString}>
         <Navbar isLanding={false} isSignedIn={isSignedIn} setSignedIn={setIsSignedIn}/>
@@ -55,7 +61,7 @@ export default function usermain() {
             :
             <div id="user-main-share-feed" className="mt-5 w-full sm:w-1/3">
                 <MakePost update={update} user={user} posts={posts} setPosts={setPosts} />
-                <Postfeed setPosts={setPosts} posts={posts} />
+                <Postfeed setPosts={setPosts} posts={posts} user={user} />
             </div>
         }
     </div>

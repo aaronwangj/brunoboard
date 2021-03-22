@@ -11,8 +11,7 @@ export default function MakePost(props) {
             .then(console.log("TESTING CALLED"))
     }
 
-
-    // TODO: IMPLEMENT ADDITION OF POST TO FIREBASE
+    const BATCH_NUM = 4
     function addPost() {
         console.log(props.user)
         console.log("DEBUG: Request to firebase sent!")
@@ -34,15 +33,18 @@ export default function MakePost(props) {
             "name": props.user["displayName"],
             "uid": props.user["uid"],
             "upvotes": 0,
-            "createdAt": dateTime
+            "createdAt": firebase.firestore.Timestamp.now(),
+            "upvoters": [],
+            "comments": {},
         }
 
-        firebase.firestore().collection("posts").add(post)
-            .then(doc => doc.get())
+        firebase.firestore().collection("testing-posts").add(post)
             .then(docRef => {
-                const newPosts = [...props.posts]
-                newPosts.unshift(docRef.data())
-                props.setPosts(newPosts)
+                docRef.update({id: docRef.id})
+                return docRef.get()
+            })
+            .then(docSnap => {
+                props.setPosts(posts => [docSnap.data(), ...posts])
                 document.getElementById("post-textarea").value=""
             })
         // .then(() => props.update())

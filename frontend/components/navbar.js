@@ -4,7 +4,7 @@ import firebase from '../firebase/firebase-config'
 
 export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
     // The className string used to style links in the Navbar
-    const linkStyling = `text-gray-500 hover:text-red-600 focus:text-red-500 ${!isLanding && "hidden sm:inline"}`
+    const linkStyling = `text-gray-500 hover:text-red-600 focus:text-red-500 sm:inline`
 
     /**
      * Handler for logout functionality.
@@ -28,12 +28,12 @@ export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
             </a>
         </Link>
         <div className="space-x-4 md:space-x-6">
-            <Link href="/about">
+            {!isSignedIn ? <Link href="/about">
                 <a className={linkStyling}>About</a>
-            </Link>
+            </Link> : <div/>}
             {/* render the logout button if user is signedin */}
-            {isSignedIn ? <div className={'inline font-bold ' + linkStyling}>
-                <button onClick={() => logoutGoogle()}> Logout </button>
+            {isSignedIn ? <div className={'inline ' + linkStyling}>
+                <button className="font-extrabold" onClick={() => logoutGoogle()}> Logout </button>
             </div> : <div/>}
         </div>
 
