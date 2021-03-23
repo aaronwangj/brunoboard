@@ -20,13 +20,15 @@ export default function Navbar({ isLanding, isSignedIn, setSignedIn }) {
         })
     }
 
-    return <div id="navbar" className="absolute top-0 right-0 p-4 w-full flex justify-between 
+    return <div id="navbar" className="absolute top-0 right-0 p-4 px-3 sm:px-6 w-full flex justify-between 
                             items-center font-display bg-white z-50">
-        <Link href="/">
-            <a className="font-semibold text-gray-700 text-xl">
-                BrunoBoard
-            </a>
-        </Link>
+        <div>
+            <Link href="/">
+                <a className="font-semibold text-gray-700 text-xl">
+                    Brunoboard
+                </a>
+            </Link>
+        </div>
         <div className="space-x-4 md:space-x-6">
             {!isSignedIn ? <Link href="/about">
                 <a className={linkStyling}>About</a>

@@ -44,7 +44,7 @@ export default function Postfeed(props) {
     return <div id="postfeed" className="w-full flex justify-center">
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
                 <div className="mt-20 w-full">
-                    <h1 className="italic font-bold text-lg">FEED</h1>
+                    <h1 className="italic font-bold text-xl">Feed</h1>
                     {/* <ul>
                         {props.posts.map(docData => <Post key={docData["id"]} docData={docData}/>)}
                     </ul> */}

@@ -40,6 +40,8 @@ export default function Post(props) {
         return
     }
 
+    const upvoteButtonClassString = `inline w-full border rounded-md border-green-400 
+                        text-center pt-1 focus:bg-green-400 focus:outline-none`
     const docIdToId = (docId) => docId + "-comment-section"
     return <li className="block mb-3" key={props.docKey}>
                 <div className="shadow-lg font-display p-2 rounded-lg border-2 
@@ -47,30 +49,35 @@ export default function Post(props) {
                     <h1 className="mb-2 font-bold">
                         {props.docData["anonymous"] ? "Anonymous" : props.docData["name"]}<br></br>
                     </h1>
-                    <p className="mb-3">{props.docData["content"]}</p>
+                    <p style={{overflowWrap: "break-word"}} className="mb-3">{props.docData["content"]}</p>
                     <div className="post-buttons w-full font-bold">
                         {!userHasLiked ? <button 
                             onClick={handleUpvoteClick}
-                            className="w-1/2 border rounded-md border-green-400 
-                                           text-center pt-1 focus:bg-green-400 focus:outline-none">
-                            <i className="material-icons inline">keyboard_arrow_up</i>
+                            className={upvoteButtonClassString}>
+                            <div className="flex flex-row justify-center">
+                                <i className="material-icons inline">keyboard_arrow_up</i> 
+                                <p>Upvote</p>
+                            </div>
                         </button> :
                         <button 
                             disabled
-                            className="w-1/2 border rounded-md border-green-400 cursor-default
-                                        text-center pt-1 bg-green-400 focus:outline-none">
-                            <i className="material-icons inline">keyboard_arrow_up</i>
-
+                            className={upvoteButtonClassString}>
+                            <div className="flex flex-row justify-center">
+                                <i className="material-icons inline">keyboard_arrow_up</i> 
+                                <p>Upvote</p>
+                            </div>
                         </button>}
-                        
                         <button 
                             onClick={handleCommentClick}
-                            className="w-1/2 border rounded-md border-blue-400 
+                            className="inline w-full border rounded-md border-blue-400 
                                            text-center pt-1 focus:bg-blue-400 focus:outline-none">
-                            <i className="material-icons">comment</i>
+                            <div className="flex flex-row justify-center">
+                                <i className="material-icons inline mr-1">comment</i>
+                                <p>Comments</p>
+                            </div>
                         </button>
                     </div>
+                    <CommentSection user={user} docId={docId} eltId={docIdToId(docId)} />
                 </div>
-                <CommentSection user={user} docId={docId} eltId={docIdToId(docId)} />
             </li>
 }

@@ -46,7 +46,7 @@ export default function usermain() {
         TODO: IMPLEMENT HOVERING NAMES DISPLAYING EMAIL
         TODO: IMPLEMENT REQUEST CONTACT INFORMATION FOR ANONYMOUS USERS
     */
-    const containerStyleString = "h-screen w-screen flex justify-center"
+    const containerStyleString = "p-2 h-screen w-screen flex justify-center"
     return <div className={containerStyleString}>
         <Navbar isLanding={false} isSignedIn={isSignedIn} setSignedIn={setIsSignedIn}/>
         {!isSignedIn ?
@@ -59,7 +59,7 @@ export default function usermain() {
                 setGoogleId={setGoogleId}
                 setUser={setUser} />
             :
-            <div id="user-main-share-feed" className="mt-5 w-full sm:w-1/3">
+            <div id="user-main-share-feed" className="mt-5 w-full md:w-1/3">
                 <MakePost update={update} user={user} posts={posts} setPosts={setPosts} />
                 <Postfeed setPosts={setPosts} posts={posts} user={user} />
             </div>

@@ -84,25 +84,28 @@ export default function CommentSection(props) {
     // for each comment section, load in all of the relevent comments
     // from firestore
     return <div style={{height:"0", overflow:"hidden", display:"none"}} 
-                className="w-full comment-section border border-blue-400 bg-blue-200 mb-6 rounded-lg p-2"
+                className="w-full comment-section p-2"
                 key={eltId}
                 id={eltId}>
                 {comments.length > 0 
                 ? 
                 comments.map((comment, i) => <Comment comment={comment} index={i}/>)
                 :
-                <div className="text-gray-400 p-3">Be the first to leave a comment!</div>}
-                <div className="w-full">
-                    <input 
-                        id={eltId + "-input"} 
-                        onChange={e => setCommentContent(e.target.value)} 
-                        type="text" placeholder="Add a comment" 
-                        className="w-3/4 border border-gray-300 focus:outline-none focus:bg-gray-200 
-                                    rounded-lg transition inline mr-3 p-2"></input>
+                <div className="text-gray-400 p-1 mb-2">Be the first to leave a comment!</div>}
+                <div style={{display:"table"}} className="w-full">
                     <button 
-                        className="w-auto p-2 bg-red-300 hover:bg-red-400 transition-colors 
-                                    inline rounded-md text-sm font-semibold cursor-pointer"
-                        onClick={handleAddComment} type="submit">post</button>
+                            className="float-right w-auto p-2 bg-red-300 hover:bg-red-400 transition-colors 
+                                        inline rounded-md text-sm font-semibold cursor-pointer"
+                            onClick={handleAddComment} type="submit">Post</button>
+                    <span className="block">
+                        <input
+                            id={eltId + "-input"} 
+                            onChange={e => setCommentContent(e.target.value)} 
+                            type="text" placeholder="Add a Comment~" 
+                            className="w-5/6 border border-gray-300 focus:outline-none focus:bg-gray-200 
+                                        rounded-lg transition inline mr-3 p-2"></input>
+                    </span>
+                    
                 </div>
             </div>
 }

@@ -51,7 +51,7 @@ export default function MakePost(props) {
     }
 
     return <div className="font-display mt-20 m-auto">
-        <h1 className="italic font-bold text-lg">SHARE</h1>
+        <h1 className="italic font-bold text-xl">Share</h1>
         <div className="" id="make-post-wrapper">
             <form className="">
                 <textarea 
@@ -74,13 +74,15 @@ export default function MakePost(props) {
                         checked={isAnonymous} 
                         onChange={() => setAnonymous(!isAnonymous)}
                         label="anonymous?"></input>
-                    <label className="italic font-semibold" htmlFor="anonymous"> anonymous?</label>
+                    <label className="italic font-semibold" htmlFor="anonymous"> Post Anonymously?</label>
                 
                 </div>
                 <button
                     onClick={() => addPost()} 
                     type="submit" 
-                    className="w-auto p-2 bg-red-300 hover:bg-red-400 transition-colors rounded-md text-sm font-semibold cursor-pointer">post</button>
+                    className="w-auto p-2 bg-red-300 hover:bg-red-400 mt-2
+                            transition-colors rounded-md text-sm font-semibold 
+                            cursor-pointer">Post</button>
             </div>
         </div>
     </div>

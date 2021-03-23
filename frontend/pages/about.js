@@ -3,7 +3,7 @@ import Navbar from '../components/navbar'
 export default function about() {
     return <div className="h-screen w-screen">
     <Navbar isLanding={false} />
-    <div id="about-wrapper" className="h-full w-full flex flex-col justify-center">
+    <div id="about-wrapper" className="font-display h-full w-full flex flex-col justify-center">
         <div className="block px-5 m-auto max-w-lg">
             <h1 className='font-bold text-3xl'>About</h1>
             <p className="font-semibold">The spectrum of problems that every individual encounters is bound to differ due to 
