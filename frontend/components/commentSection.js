@@ -89,20 +89,20 @@ export default function CommentSection(props) {
                 id={eltId}>
                 {comments.length > 0 
                 ? 
-                comments.map((comment, i) => <Comment comment={comment} index={i}/>)
+                comments.map((comment, i) => <Comment comment={comment} key={i} index={i}/>)
                 :
                 <div className="text-gray-400 p-1 mb-2">Be the first to leave a comment!</div>}
                 <div style={{display:"table"}} className="w-full">
                     <button 
-                            className="float-right w-auto p-2 bg-red-300 hover:bg-red-400 transition-colors 
+                            className="float-right w-1/6 p-2 bg-red-300 hover:bg-red-400 transition-colors 
                                         inline rounded-md text-sm font-semibold cursor-pointer"
                             onClick={handleAddComment} type="submit">Post</button>
-                    <span className="block">
+                    <span className="block w-5/6 pr-3">
                         <input
                             id={eltId + "-input"} 
                             onChange={e => setCommentContent(e.target.value)} 
                             type="text" placeholder="Add a Comment~" 
-                            className="w-5/6 border border-gray-300 focus:outline-none focus:bg-gray-200 
+                            className="w-full border border-gray-300 focus:outline-none focus:bg-gray-200 
                                         rounded-lg transition inline mr-3 p-2"></input>
                     </span>
                     

@@ -1,4 +1,4 @@
-import { useState} from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navbar from './navbar'
 import GoogleLogin from 'react-google-login'
@@ -7,36 +7,40 @@ import firebase from '../firebase/firebase-config'
 
 export default function Landing(props) {
 
-    /**
-     * Hanlder method for login functionality
-     * @param {json} response Response returned by Google upon login request.
-     */
-    const loginGoogle = (response) => {
-        if (response["tokenId"] != undefined) {
-            console.log("Successfully logged in via Google")
-            props.setSignedIn(true)
-            let profileObj = response["profileObj"]
-            let name = profileObj["name"]
-            let email = profileObj["email"]
-            let googleId = profileObj["googleId"]
-            props.setName(name); props.setEmail(email); props.setGoogleId(googleId);
-            console.log(response["profileObj"])
+    /* ---------------- alternative solution to logging in ------------------- */
+
+    const checkSessionAuthPersist = () => {
+        console.log("TEST")
+        const keys = Object.keys(window.sessionStorage)
+        for (const index in keys) {
+            if (keys[index].includes("firebase:authUser:")) {
+                // TODO: verify user object validity
+                console.log("SESSION LOGIN INFO FOUND!")
+                const user = JSON.parse(sessionStorage.getItem(keys[index]))
+                return user
+           }
         }
-        else {
-            alert("Google login unsuccessful. Please make sure that you are using an @brown.edu email.")
-        }
-        
+        return null;
     }
 
-    /* ---------------- alternative solution to loggin in ------------------- */
-
+    useEffect(() => {
+        const user = checkSessionAuthPersist()
+        console.log("CHECKING SESSION STORAGE!")
+        if (user) {
+            props.setGoogleId(user.uid)
+            props.setEmail(user.email)
+            props.setName(user.name)
+            props.setSignedIn(true)
+            props.setUser(user)
+        }
+    }, [])
     /**
      * Function to handle login to firebase via Google. The hosted domain
      * is restricted to @brown.edu. Any newly logged in user is automatically
      * added to the firebase users
      */
     const googleAuthFirebase = () => {
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE) // persistence settings are NONE, LOCAL, or SESSION 
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION) // persistence settings are NONE, LOCAL, or SESSION 
             .then(() => { 
                 // provider object to help with firebase authentication
                 const provider = new firebase.auth.GoogleAuthProvider();
@@ -49,12 +53,13 @@ export default function Landing(props) {
                         if(result["additionalUserInfo"]["profile"]["hd"] === "brown.edu") {
                             var credential = result.credential
                             var user = result.user
+                            
                             // set the hooks for the user main page 
                             props.setGoogleId(user.uid)
                             props.setEmail(user.email)
                             props.setName(user.name)
                             props.setSignedIn(true)
-                            props.setUser(user)
+                            props.setUser(user.toJSON())
                         } else {
                             alert("Login Unsuccessful. Please make sure that you are using an @brown.edu email")
                         }
