@@ -1,5 +1,5 @@
 import firebase from '../firebase/firebase-config'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import CommentSection from './commentSection'
 import Popup from 'reactjs-popup'
 
@@ -14,6 +14,8 @@ export default function Post(props) {
     const [memScroll, setMemScroll] = useState(null)
 
     const [visibility, setVisibility] = useState({ display: 'none' })
+
+    const isMounted = useRef(false)
 
     useEffect(() => updateLikedState(), [])
 
@@ -121,7 +123,11 @@ export default function Post(props) {
     }
 
     useEffect(() => {
-        if (!displayRelated) window.scroll(0, memScroll)
+        if (isMounted.current) {
+            if (!displayRelated) window.scroll(0, memScroll)
+        } else {
+            isMounted.current = true
+        }
     }, [displayRelated])
 
     return <li className="post-item block mb-3" key={props.docKey}>
