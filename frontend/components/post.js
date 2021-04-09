@@ -51,8 +51,15 @@ export default function Post(props) {
         return
     }
 
-    const fetchBioInfo = () => {
-        setVisibility({ display: "block" })
+    const handleDisplayBio = () => {
+        if (visibility.display === "inline") {
+            setVisibility({ display: "none" })
+            return
+        }
+
+        console.log("")
+
+        setVisibility({ display: "inline" })
         if (props.docData["anonymous"]) return
         // console.log("Fetching bio info...")
         if (thisUserBio) return
@@ -65,10 +72,6 @@ export default function Post(props) {
             }
             )
 
-    }
-
-    const handleMouseLeave = () => {
-        setVisibility({ display: "none" })
     }
 
     const handleTagSearch = () => {
@@ -97,6 +100,7 @@ export default function Post(props) {
     const handleDisplayRelatedPosts = () => {
         if (!displayRelated) {
             setMemScroll(window.scrollY)
+            setVisibility({ display: "none" })
             console.log(window.scrollY)
             if (relatedPosts.length == 0) {
                 let tagSearch = handleTagSearch()
@@ -123,6 +127,7 @@ export default function Post(props) {
     }
 
     useEffect(() => {
+        if(displayRelated) setVisibility({ display: "none" })
         if (isMounted.current) {
             if (!displayRelated) window.scroll(0, memScroll)
         } else {
@@ -135,28 +140,30 @@ export default function Post(props) {
             // onClick={handleTagSearch}
             className="bg-white shadow-lg font-display p-2 rounded-lg border-2
                         border-gray-300 hover:border-gray-600 transition-colors">
-            <div onMouseEnter={fetchBioInfo} className="inline-block mb-2">
-                {thisUserBio && !props.docData.anonymous
-                    ?
-                    <div onMouseLeave={handleMouseLeave} style={visibility}
-                        className="max-w-md md:max-w-sm relative transition-transform bg-white border 
-                        shadow-md rounded-md p-3 border-gray-300">
-                        <h1 className="font-bold text-lg">&#129528; {props.docData.name}</h1>
-                        <div className="text-sm mb-2">&#9997; Studies {thisUserBio.majors.map(s => {
-                            if (s.indexOf("-") >= 0) return s.substring(0, s.indexOf("-") - 1)
-                            else return s
-                        }).join(", ")} </div>
-                        <span>{thisUserBio.biography}</span>
-                    </div> : <div></div>}
-                <h1 className="font-bold">
+            <div className="inline-block mb-2">
+
+                <h1 onClick={handleDisplayBio} className="font-bold cursor-pointer hover:underline">
                     {props.docData.anonymous ? "Anonymous" : props.docData["name"]}
                 </h1>
             </div>
+            {thisUserBio && !props.docData.anonymous &&!displayRelated
+                ?
+                <div style={visibility}
+                    className="max-w-md md:max-w-sm
+                        absolute bg-white border ml-4
+                        shadow-md rounded-md p-3 border-gray-300">
+                    <h1 className="font-bold text-lg">&#129528; {props.docData.name}</h1>
+                    <div className="text-sm mb-2">&#9997; Studies {thisUserBio.majors.map(s => {
+                        if (s === "Select a Concentration") return ""
+                        if (s.indexOf("-") >= 0) return s.substring(0, s.indexOf("-") - 1)
+                        else return s
+                    }).join(", ")} </div>
+                    <span>{thisUserBio.biography}</span>
+                </div> : <div></div>}
 
             {!props.isNested ? <p
-                onClick={handleDisplayRelatedPosts}
-                style={{ overflowWrap: "break-word" }}
-                className="mb-4 cursor-pointer hover:bg-gray-200 bg-opacity-75 transition-colors">
+                style={{ whiteSpace: "pre-line", overflowWrap: "break-word" }}
+                className="mb-4">
                 {props.docData["content"]}
             </p>
                 :
@@ -166,7 +173,9 @@ export default function Post(props) {
                     {props.docData["content"]}
                 </p>}
 
-            {props.docData.tags ? <div className="text-sm mb-2">
+            {props.docData.tags ? <div
+                onClick={handleDisplayRelatedPosts}
+                className={"text-sm mb-2 py-2 transition-colors" + (!props.isNested ? " hover:underline cursor-pointer" : "")}>
                 Tags: {props.docData.tags.map(tag => <span className="bg-gray-200 mr-3 p-1 px-2 text-sm rounded-lg">{tag}</span>)}
             </div> :
                 <div></div>}
@@ -201,18 +210,18 @@ export default function Post(props) {
         </div>
 
         {displayRelated ?
-        <div style={{ display: (displayRelated ? "" : "none") }} className="top-0 left-0 absolute h-screen w-screen flex justify-center p-2 bg-gray-500 z-50 bg-opacity-50">
-            <div className="text-red-300 hover:text-red-400 underline text-3xl font-extrabold cursor-pointer mr-3" onClick={handleDisplayRelatedPosts}>x</div>
-            <div id="nested-related-posts" className="pt-10 h-full overflow-y-scroll w-full lg:w-1/3">
-                <h1 className="font-extrabold text-white text-xl mb-2">Posts with similar tags</h1>
-                {relatedPosts.length > 0
-                    ?
-                    relatedPosts.map(docData => <Post key={docData.id} docKey={docData.id} user={props.user} docData={docData} isNested={true} />)
-                    :
-                    <div className="font-bold text-white text-lg mb-2">No posts with similar tags were found :(</div>
-                }
+            <div style={{ display: (displayRelated ? "" : "none") }} className="mr-3 top-0 left-0 absolute h-screen w-screen flex justify-center p-2 bg-gray-500 z-50 bg-opacity-50">
+                <div className="text-red-300 hover:text-red-400 underline text-3xl font-extrabold cursor-pointer mr-3" onClick={handleDisplayRelatedPosts}>x</div>
+                <div id="nested-related-posts" className="pt-10 h-full overflow-y-scroll w-full lg:w-1/3">
+                    <h1 className="font-extrabold text-white text-xl mb-2">Posts with similar tags</h1>
+                    {relatedPosts.length > 0
+                        ?
+                        relatedPosts.map(docData => <Post key={docData.id} docKey={docData.id} user={props.user} docData={docData} isNested={true} />)
+                        :
+                        <div className="font-bold text-white text-lg mb-2">No posts with similar tags were found :(</div>
+                    }
+                </div>
             </div>
-        </div>
-        : <div style={{ display: "none" }}></div>}
+            : <div style={{ display: "none" }}></div>}
     </li>
 }
