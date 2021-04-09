@@ -78,17 +78,19 @@ export default function Landing(props) {
 
     return (<div className="h-full w-screen flex flex-col justify-center">
         <Navbar isLanding={true} />
-        <div id='landing-text-wrapper' className='block m-auto px-5 mt-0 mb-4 max-w-lg'> 
+        <div id='landing-text-wrapper' className='text-center block m-auto px-5 mt-0 mb-4 max-w-lg'> 
             <h1 className="font-extrabold text-4xl">Creativity is Connecting Things.</h1>
+            <br></br>
             <p className="mt-2 text-xl">
                 Brunoboard was created with the mission to provide an environment where ideas thrive. <br></br>
-                Find your inspirations today.
+                <br></br>
+                Share and browse ideas within the Brown community today.
             </p>
         </div>
         <div id='landing-button-wrapper' className='block mt-3 flex grid justify-center'>
             <div id='google-oauth' className="inline grid items-center"> 
                 <button className="bg-red-400 hover:bg-red-500 transition-colors 
-                                    p-3 rounded-lg text-white font-semibold" onClick={() => googleAuthFirebase()}>Login via Google</button>
+                                    p-3 rounded-lg text-white font-semibold" onClick={() => googleAuthFirebase()}>Login via Brown Email</button>
             </div>
         </div>
         

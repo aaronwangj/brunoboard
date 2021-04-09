@@ -5,6 +5,7 @@ export default function MakePost(props) {
     const [isAnonymous, setAnonymous] = useState(false)
     const [postContent, setPostContent] = useState("")
     const [tags, setTags] = useState([])
+    const [tooltipToggled, setTooltipToggled] = useState(false)
 
     function testFirebase() {
         firebase.firestore().collection("testing")
@@ -45,11 +46,12 @@ export default function MakePost(props) {
                 docRef.update({ id: docRef.id })
                 return docRef.get()
             })
-            .then(docSnap => {
-                props.setPosts(posts => [docSnap.data(), ...posts])
-                document.getElementById("post-textarea").value = ""
-                setTags([])
-            })
+            // .then(docSnap => {
+            //     props.setPosts(posts => [docSnap.data(), ...posts])
+            //     document.getElementById("post-textarea").value = ""
+            //     setTags([])
+            // })
+            .then(() => window.location.reload()) // force refresh to fetch the newly posted data
         // .then(() => props.update())
     }
 
@@ -71,6 +73,14 @@ export default function MakePost(props) {
         })
     }
 
+    const toggleTooltip = () => {
+        if (tooltipToggled) {
+            setTooltipToggled(false)
+        } else {
+            setTooltipToggled(true)
+        }
+    }
+
     return <div className="font-display mt-20 m-auto">
         <h1 className="italic font-bold text-xl">Share</h1>
         <div className="" id="make-post-wrapper">
@@ -89,8 +99,8 @@ export default function MakePost(props) {
             </form>
             <div className="mb-1 max-w-full flex flex-wrap flex-row">
                 Tags:  {tags.map(tag => <span className="flex bg-gray-200 ml-3 mb-1 p-1 px-2 rounded-lg">{tag}
-                    <span className="ml-1 cursor-pointer hover:bg-gray-400 border rounded-lg p-1 py-0" onClick={() => handleCancelTag(tag)}>&times;</span>
-                </span>)}
+                <span className="ml-1 cursor-pointer hover:bg-gray-400 border rounded-lg p-1 py-0" onClick={() => handleCancelTag(tag)}>&times;</span>
+            </span>)}
             </div>
             <form className="inline-block w-2/3" onSubmit={handleAddTags}>
                 <input
@@ -99,7 +109,7 @@ export default function MakePost(props) {
                     type="text" id="post-tags" placeholder="Add tags!"></input>
                 <button className="inline w-1/5 bg-gray-200 hover:bg-gray-300 p-1 rounded-lg" type="submit">+Tag</button>
             </form>
-            
+
             <div className="">
                 <button
                     onClick={() => addPost()}
@@ -107,7 +117,7 @@ export default function MakePost(props) {
                     className="mr-2 inline w-auto p-2 bg-red-300 hover:bg-red-400 mt-2
                             transition-colors rounded-md text-sm font-semibold 
                             cursor-pointer">Post</button>
-                <div className="inline h-full text-sm">
+                <div className="inline h-full ml-3 text-sm">
                     <input
                         id="anonymous"
                         name="anonymous"
@@ -115,7 +125,14 @@ export default function MakePost(props) {
                         checked={isAnonymous}
                         onChange={() => setAnonymous(!isAnonymous)}
                         label="anonymous?"></input>
-                    <label className="italic font-semibold" htmlFor="anonymous"> Post Anonymously?</label>
+                    <label className="font-semibold" htmlFor="anonymous"> Anonymously?</label>
+                    <div className="inline ml-1 absolute mt-4 text-md" >
+                        <span onClick={toggleTooltip} className="cursor-pointer hover:text-red-300 hover:font-bold">&#9432;</span>
+                    {tooltipToggled ? <div className="ml-2 p-2 border border-gray-300 rounded-lg float-right max-w-full sm:max-w-sm">
+                        Anonymity does not mean users will not take responsibility for their posts.
+                        Moderators reserve the right to act accordingly should inappropriate conducts occur.
+                    </div> : <div></div>}</div>
+                    
                 </div>
             </div>
         </div>

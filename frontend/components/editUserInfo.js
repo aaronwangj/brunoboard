@@ -18,7 +18,7 @@ export default function EditUserInfo(props) {
             {Array(concentrationCount).fill()
                 .map((_, i) => <div key={i}><select className="w-1/2 mb-2 concentration-dropdown focus:outline-none border-b-4 
                                                 border-gray-400 focus:border-green-600" tabIndex="-1">
-                <option value="">Select a Concentration</option> 
+                <option value="">Select a (Prospective) Concentration</option> 
                 <option value="AFRI-AB">Africana Studies - AB</option> 
                 <option value="AMST-AB">American Studies - AB</option> 
                 <option value="ANTH-AB-ANTA">Anthropology - AB (Anthropological Archaeology)</option> 
@@ -172,6 +172,12 @@ export default function EditUserInfo(props) {
 
     const handleUserSubmit = e => {
         e.preventDefault()
+        const dropDowns = Array.from(document.getElementsByClassName("concentration-dropdown"))
+        console.log(dropDowns.map(e => e.value))
+        if (!dropDowns.every(dropDown => dropDown.value !== "")) {
+            alert("Please don't leave any concentration select fields blank!")
+            return
+        }
 
         const biography = document.getElementById("change-biography-input").value
         const selectedMajors = [...document.getElementsByClassName("concentration-dropdown")].map(e => e.options[e.selectedIndex].innerHTML)
@@ -185,7 +191,8 @@ export default function EditUserInfo(props) {
         )
         .then(() => {
             console.log("New user documented in firestore.")
-            props.setIsFirstTimer(false)
+            // props.setIsFirstTimer(false)
+            props.setDoneEditInfo(true)
         })
     }
 
